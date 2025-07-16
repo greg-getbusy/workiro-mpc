@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "workiro": {
+      "command": "node",
+      "args": [
+        "C:\\dev\\workiro-mpc\\build\\index.js"
+      ],
+      "alwaysAllow": [
+        "call_custom_api"
+      ]
+    }
+  }
+}
