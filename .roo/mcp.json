@@ -14,7 +14,8 @@
         "update_person",
         "update_organization",
         "get_workspaces",
-        "create_project"
+        "create_project",
+        "get_projects"
       ],
       "disabledTools": [
         "call_custom_api"
