@@ -338,6 +338,316 @@ server.tool(
     }
   }
 );
+server.tool(
+  "update_organization",
+  {
+    id: z.string().uuid(),
+    name: z.string().optional(),
+    notes: z.string().optional(),
+    relationships: z.array(
+      z.object({
+        id: z.string().uuid(),
+        properties: z.array(
+          z.object({
+            id: z.string().uuid(),
+            value: z.string(),
+            is_key: z.boolean()
+          })
+        )
+      })
+    ).optional()
+  },
+  {
+    title: "Update an organization using the provided schema and PATCH to /api/v1/contacts/organization/{id} with OAuth2 authentication"
+  },
+  async (args, _extra) => {
+    const clientSecret = "LHSPassword1";
+    const tokenUrl = `${identity_domain}/identity/connect/token`;
+
+    if (!userName || !clientSecret || !tokenUrl) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "OAuth2 credentials are not set in environment variables.",
+          },
+        ],
+      };
+    }
+
+    // Get access token
+    let accessToken: string | null = null;
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "password",
+          client_id: 'POSTMAN',
+          client_secret: clientSecret,
+          username: userName,
+          password: clientSecret,
+          scope: 'conversationsmanagement openid offline_access'
+        }),
+      });
+      const tokenJson = await tokenRes.json();
+      accessToken = tokenJson.access_token;
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error obtaining OAuth2 token: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+
+    if (!accessToken) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No access token received from OAuth2 server.",
+          },
+        ],
+      };
+    }
+
+    const { id, ...updateFields } = args;
+    const endpoint = `${api_domain}/api/v1/contacts/organization/${id}`;
+    try {
+      const res = await fetch(endpoint, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateFields),
+      });
+      const text = await res.text();
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Status: ${res.status}\nResponse:\n${text}`,
+          },
+        ],
+      };
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error calling API: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+  }
+);
+server.tool(
+  "update_person",
+  {
+    id: z.string().uuid(),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
+    email_address: z.string().email("Invalid email address").optional(),
+    relationships: z.array(
+      z.object({
+        id: z.string().uuid(),
+        properties: z.array(
+          z.object({
+            id: z.string().uuid(),
+            value: z.string(),
+            is_key: z.boolean()
+          })
+        )
+      })
+    ).optional()
+  },
+  {
+    title: "Update a person using the provided schema and PATCH to /api/v1/contacts/person/{id} with OAuth2 authentication"
+  },
+  async (args, _extra) => {
+    const clientSecret = "LHSPassword1";
+    const tokenUrl = `${identity_domain}/identity/connect/token`;
+
+    if (!userName || !clientSecret || !tokenUrl) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "OAuth2 credentials are not set in environment variables.",
+          },
+        ],
+      };
+    }
+
+    // Get access token
+    let accessToken: string | null = null;
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "password",
+          client_id: 'POSTMAN',
+          client_secret: clientSecret,
+          username: userName,
+          password: clientSecret,
+          scope: 'conversationsmanagement openid offline_access'
+        }),
+      });
+      const tokenJson = await tokenRes.json();
+      accessToken = tokenJson.access_token;
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error obtaining OAuth2 token: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+
+    if (!accessToken) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No access token received from OAuth2 server.",
+          },
+        ],
+      };
+    }
+
+    const { id, ...updateFields } = args;
+    const endpoint = `${api_domain}/api/v1/contacts/person/${id}`;
+    try {
+      const res = await fetch(endpoint, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateFields),
+      });
+server.tool(
+  "get_organizations",
+  "Get a list of organizations using the provided API endpoint with OAuth2 authentication",
+  async () => {
+    const clientSecret = "LHSPassword1";
+    const tokenUrl = `${identity_domain}/identity/connect/token`;
+
+    if (!userName || !clientSecret || !tokenUrl) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "OAuth2 credentials are not set in environment variables.",
+          },
+        ],
+      };
+    }
+
+    // Get access token
+    let accessToken: string | null = null;
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "password",
+          client_id: 'POSTMAN',
+          client_secret: clientSecret,
+          username: userName,
+          password: clientSecret,
+          scope: 'conversationsmanagement openid offline_access'
+        }),
+      });
+      const tokenJson = await tokenRes.json();
+      accessToken = tokenJson.access_token;
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error obtaining OAuth2 token: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+
+    if (!accessToken) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No access token received from OAuth2 server.",
+          },
+        ],
+      };
+    }
+
+    const endpoint = "https://testapi.dev.getbusy.com/api/v1/contacts/organization";
+    try {
+      const res = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const text = await res.text();
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Status: ${res.status}\nResponse:\n${text}`,
+          },
+        ],
+      };
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error calling API: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+  }
+);
+      const text = await res.text();
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Status: ${res.status}\nResponse:\n${text}`,
+          },
+        ],
+      };
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error calling API: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+  }
+);
 
 server.tool(
   "get_people",

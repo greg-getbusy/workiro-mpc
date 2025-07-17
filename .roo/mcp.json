@@ -10,7 +10,12 @@
         "create_person",
         "get_people",
         "get_relationships",
-        "create_organization"
+        "create_organization",
+        "update_person",
+        "update_organization"
+      ],
+      "disabledTools": [
+        "call_custom_api"
       ]
     },
     "git": {
