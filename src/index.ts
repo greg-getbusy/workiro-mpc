@@ -127,10 +127,10 @@ server.tool(
     email_address: z.string().email("Invalid email address"),
     relationships: z.array(
       z.object({
-        id: z.string().uuid(),
+        id: z.string(),
         properties: z.array(
           z.object({
-            id: z.string().uuid(),
+            id: z.string(),
             value: z.string(),
             is_key: z.boolean()
           })
@@ -237,10 +237,10 @@ server.tool(
     notes: z.string(),
     relationships: z.array(
       z.object({
-        id: z.string().uuid(),
+        id: z.string(),
         properties: z.array(
           z.object({
-            id: z.string().uuid(),
+            id: z.string(),
             value: z.string(),
             is_key: z.boolean()
           })
@@ -341,15 +341,15 @@ server.tool(
 server.tool(
   "update_organization",
   {
-    id: z.string().uuid(),
+    id: z.string(),
     name: z.string().optional(),
     notes: z.string().optional(),
     relationships: z.array(
       z.object({
-        id: z.string().uuid(),
+        id: z.string(),
         properties: z.array(
           z.object({
-            id: z.string().uuid(),
+            id: z.string(),
             value: z.string(),
             is_key: z.boolean()
           })
@@ -451,16 +451,16 @@ server.tool(
 server.tool(
   "update_person",
   {
-    id: z.string().uuid(),
+    id: z.string(),
     first_name: z.string().optional(),
     last_name: z.string().optional(),
     email_address: z.string().email("Invalid email address").optional(),
     relationships: z.array(
       z.object({
-        id: z.string().uuid(),
+        id: z.string(),
         properties: z.array(
           z.object({
-            id: z.string().uuid(),
+            id: z.string(),
             value: z.string(),
             is_key: z.boolean()
           })
@@ -738,6 +738,120 @@ try {
 } catch (e) {
   console.error("Failed to parse and extract relationship properties:", e);
 }
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Status: ${res.status}\nResponse:\n${text}`,
+          },
+        ],
+      };
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error calling API: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+  }
+)
+
+const createProjectSchema = {
+  name: z.string(),
+  description: z.string(),
+  properties: z.array(
+    z.object({
+      id: z.string(),
+      value: z.string()
+    })
+  ),
+  relates_to: z.object({
+    tags: z.array(z.object({ id: z.string() })).optional(),
+    contacts: z.array(z.object({ id: z.string() })).optional(),
+    projects: z.array(z.object({ id: z.string() })).optional(),
+    prompts: z.array(z.object({ id: z.string() })).optional(),
+    messages: z.array(z.object({ id: z.string() })).optional(),
+    connections: z.array(z.object({ id: z.string() })).optional()
+  }),
+  workspace_unit: z.object({})
+};
+
+server.tool(
+  "create_project",
+  createProjectSchema,
+  {
+    title: "Create a project using the provided schema and POST to /api/v1/project with OAuth2 authentication"
+  },
+  async (args, _extra) => {
+    const clientSecret = "LHSPassword1";
+    const tokenUrl = `${identity_domain}/identity/connect/token`;
+
+    if (!userName || !clientSecret || !tokenUrl) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "OAuth2 credentials are not set in environment variables.",
+          },
+        ],
+      };
+    }
+
+    // Get access token
+    let accessToken: string | null = null;
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "password",
+          client_id: 'POSTMAN',
+          client_secret: clientSecret,
+          username: userName,
+          password: clientSecret,
+          scope: 'conversationsmanagement openid offline_access'
+        }),
+      });
+      const tokenJson = await tokenRes.json();
+      accessToken = tokenJson.access_token;
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error obtaining OAuth2 token: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+
+    if (!accessToken) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No access token received from OAuth2 server.",
+          },
+        ],
+      };
+    }
+
+    const endpoint = `${api_domain}/api/v1/project`;
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(args),
+      });
+      const text = await res.text();
       return {
         content: [
           {
