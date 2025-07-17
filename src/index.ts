@@ -1126,7 +1126,7 @@ server.tool(
 );
 server.tool(
   "get_relationships",
-  "Get a list of relationships using the provided API endpoint with OAuth2 authentication",
+  "Get a list of relationships from Workiro. Use this tool when creating or updating people or connections in Workiro.",
   async () => {
     const clientSecret = "LHSPassword1";
     const tokenUrl = `${identity_domain}/identity/connect/token`;
