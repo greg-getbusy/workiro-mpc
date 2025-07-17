@@ -4,9 +4,10 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-const NWS_API_BASE = "https://api.weather.gov";
-const USER_AGENT = "weather-app/1.0";
-
+// const identity_domain = "http://localhost:8181"
+const identity_domain = "https://testidentity.dev.workiro.com"
+const api_domain = "https://testapi.dev.getbusy.com"
+const userName = "gbusertest.gregf+workexperience@gmail.com";
 // Create server instance
 const server = new McpServer({
   name: "workiro",
@@ -23,11 +24,10 @@ server.tool(
   "Call a custom REST API using OAuth2 Client Credentials flow",
   async () => {
     // OAuth2 credentials from environment variables
-    const clientId = "gbusertest.gregf+mcp_server_1@gmail.com";
     const clientSecret =  "LHSPassword1";
-    const tokenUrl =  "http://localhost:8181/identity/connect/token";
+    const tokenUrl =  `${identity_domain}/identity/connect/token`;
 
-    if (!clientId || !clientSecret || !tokenUrl) {
+    if (!userName || !clientSecret || !tokenUrl) {
       return {
         content: [
           {
@@ -50,7 +50,7 @@ server.tool(
           grant_type: "password",
           client_id: 'POSTMAN',
           client_secret: clientSecret,
-          username: clientId,
+          username: userName,
           password: clientSecret,
           scope: 'conversationsmanagement openid offline_access'
         }),
@@ -82,7 +82,7 @@ server.tool(
       };
     }
 
-    const endpoint = "http://localhost:7050/api/v1/user/profile"
+    const endpoint = `${api_domain}/api/v1/user/profile`
     const method = "GET"
     // Make authenticated API request
     try {
@@ -124,18 +124,18 @@ server.tool(
   {
     first_name: z.string(),
     last_name: z.string(),
-    email_address: z.string().email("Invalid email address")ssssssssss
+    email_address: z.string().email("Invalid email address")
   },
   {
     title: "Create a person using the provided schema and POST to /api/v1/contacts/person with OAuth2 authentication"
   },
   async (args, _extra) => {
     // OAuth2 credentials (should be from env in production)
-    const clientId = "gbusertest.gregf+mcp_server_1@gmail.com";
+    
     const clientSecret = "LHSPassword1";
-    const tokenUrl = "http://localhost:8181/identity/connect/token";
+    const tokenUrl = `${identity_domain}/identity/connect/token`;
 
-    if (!clientId || !clientSecret || !tokenUrl) {
+    if (!userName || !clientSecret || !tokenUrl) {
       return {
         content: [
           {
@@ -158,7 +158,7 @@ server.tool(
           grant_type: "password",
           client_id: 'POSTMAN',
           client_secret: clientSecret,
-          username: clientId,
+          username: userName,
           password: clientSecret,
           scope: 'conversationsmanagement openid offline_access'
         }),
@@ -187,7 +187,7 @@ server.tool(
       };
     }
 
-    const endpoint = "http://localhost:7050/api/v1/contacts/person";
+    const endpoint = `${api_domain}/api/v1/contacts/person`;
     try {
       const res = await fetch(endpoint, {
         method: "POST",
