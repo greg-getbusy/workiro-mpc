@@ -287,6 +287,26 @@ server.tool(
         },
       });
       const text = await res.text();
+// Parse and log relationship properties for each person
+try {
+  const json = JSON.parse(text);
+  if (json.result && Array.isArray(json.result)) {
+    json.result.forEach((person: any, idx: number) => {
+      if (person.relationships && Array.isArray(person.relationships)) {
+        person.relationships.forEach((rel: any, rIdx: number) => {
+          if (rel.properties && Array.isArray(rel.properties)) {
+            console.log(
+              `Person #${idx + 1} Relationship #${rIdx + 1} Properties:`,
+              rel.properties
+            );
+          }
+        });
+      }
+    });
+  }
+} catch (e) {
+  console.error("Failed to parse and extract relationship properties:", e);
+}
       return {
         content: [
           {
@@ -334,3 +354,101 @@ main().catch((error) => {
  * Token Expiration:
  * - Token is fetched for each request. For APIs with long-lived tokens, consider caching.
  */
+// TypeScript interfaces for get_people response
+
+interface Property {
+  id: string;
+  name: string;
+  value: string;
+}
+
+interface Relationship {
+  id: string;
+  name: string;
+  properties: Property[];
+}
+
+interface RelatesTo {
+  projects: { id: string }[];
+  contacts: { type: string; id: string }[];
+}
+
+interface GroupAccess {
+  allow: { id: string }[];
+}
+
+interface Person {
+  contact_guid: string;
+  account_guid: string;
+  owner_guid: string;
+  last_activity: string;
+  is_hidden: boolean;
+  relationships: Relationship[];
+  props: Record<string, string>;
+  type: string;
+  relates_to: RelatesTo;
+  group_access: GroupAccess;
+}
+
+interface ErrorInfo {
+  http_status_code: number;
+  error_code: string;
+  messages: string[];
+}
+
+interface GetPeopleResponse {
+  result: Person[];
+  error?: ErrorInfo;
+}
+// Example: Get people and show their relationship properties
+async function showPeopleRelationshipProperties() {
+  const peopleResponse = await server.tools.get_people();
+  if (peopleResponse && peopleResponse.content && Array.isArray(peopleResponse.content)) {
+    const textBlock = peopleResponse.content.find((c: any) => c.type === "text");
+    if (textBlock && textBlock.text) {
+      try {
+        const json = JSON.parse(textBlock.text.replace(/^Status: \d+\nResponse:\n/, ""));
+        if (json.result && Array.isArray(json.result)) {
+          json.result.forEach((person: any, idx: number) => {
+            if (person.relationships && Array.isArray(person.relationships)) {
+              person.relationships.forEach((rel: any, rIdx: number) => {
+                if (rel.properties && Array.isArray(rel.properties)) {
+                  console.log(
+                    `Person #${idx + 1} Relationship #${rIdx + 1} Properties:`,
+                    rel.properties
+                  );
+                }
+              });
+            }
+          });
+        }
+      } catch (e) {
+        console.error("Failed to parse and extract relationship properties:", e);
+      }
+    }
+  }
+}
+
+// Uncomment to run
+// showPeopleRelationshipProperties();
+
+export function parseGetPeopleResponse(response: GetPeopleResponse): Person[] {
+  if (response.error && response.error.messages.length > 0) {
+    throw new Error(`API Error: ${response.error.messages.join(', ')}`);
+  }
+  return response.result;
+}
+// Function to parse and print all properties of each person in the get_people response
+
+export function printPeopleProperties(response: GetPeopleResponse): void {
+  if (response.error && response.error.messages.length > 0) {
+    console.error("API Error:", response.error.messages.join(", "));
+    return;
+  }
+  response.result.forEach((person, idx) => {
+    console.log(`Person #${idx + 1}:`);
+    Object.entries(person).forEach(([key, value]) => {
+      console.log(`  ${key}:`, value);
+    });
+  });
+}
