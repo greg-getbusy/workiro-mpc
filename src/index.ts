@@ -124,7 +124,19 @@ server.tool(
   {
     first_name: z.string(),
     last_name: z.string(),
-    email_address: z.string().email("Invalid email address")
+    email_address: z.string().email("Invalid email address"),
+    relationships: z.array(
+      z.object({
+        id: z.string().uuid(),
+        properties: z.array(
+          z.object({
+            id: z.string().uuid(),
+            value: z.string(),
+            is_key: z.boolean()
+          })
+        )
+      })
+    ).optional()
   },
   {
     title: "Create a person using the provided schema and POST to /api/v1/contacts/person with OAuth2 authentication"
@@ -327,6 +339,95 @@ try {
     }
   }
 );
+server.tool(
+  "get_relationships",
+  "Get a list of relationships using the provided API endpoint with OAuth2 authentication",
+  async () => {
+    const clientSecret = "LHSPassword1";
+    const tokenUrl = `${identity_domain}/identity/connect/token`;
+
+    if (!userName || !clientSecret || !tokenUrl) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "OAuth2 credentials are not set in environment variables.",
+          },
+        ],
+      };
+    }
+
+    // Get access token
+    let accessToken: string | null = null;
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "password",
+          client_id: 'POSTMAN',
+          client_secret: clientSecret,
+          username: userName,
+          password: clientSecret,
+          scope: 'conversationsmanagement openid offline_access'
+        }),
+      });
+      const tokenJson = await tokenRes.json();
+      accessToken = tokenJson.access_token;
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error obtaining OAuth2 token: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+
+    if (!accessToken) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No access token received from OAuth2 server.",
+          },
+        ],
+      };
+    }
+
+    const endpoint = "https://testapi.dev.getbusy.com/api/v1/contacts/relationships";
+    try {
+      const res = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const text = await res.text();
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Status: ${res.status}\nResponse:\n${text}`,
+          },
+        ],
+      };
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error calling API: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+  }
+);
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
@@ -399,34 +500,6 @@ interface ErrorInfo {
 interface GetPeopleResponse {
   result: Person[];
   error?: ErrorInfo;
-}
-// Example: Get people and show their relationship properties
-async function showPeopleRelationshipProperties() {
-  const peopleResponse = await server.tools.get_people();
-  if (peopleResponse && peopleResponse.content && Array.isArray(peopleResponse.content)) {
-    const textBlock = peopleResponse.content.find((c: any) => c.type === "text");
-    if (textBlock && textBlock.text) {
-      try {
-        const json = JSON.parse(textBlock.text.replace(/^Status: \d+\nResponse:\n/, ""));
-        if (json.result && Array.isArray(json.result)) {
-          json.result.forEach((person: any, idx: number) => {
-            if (person.relationships && Array.isArray(person.relationships)) {
-              person.relationships.forEach((rel: any, rIdx: number) => {
-                if (rel.properties && Array.isArray(rel.properties)) {
-                  console.log(
-                    `Person #${idx + 1} Relationship #${rIdx + 1} Properties:`,
-                    rel.properties
-                  );
-                }
-              });
-            }
-          });
-        }
-      } catch (e) {
-        console.error("Failed to parse and extract relationship properties:", e);
-      }
-    }
-  }
 }
 
 // Uncomment to run
