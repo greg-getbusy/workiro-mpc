@@ -218,6 +218,95 @@ server.tool(
     }
   }
 );
+server.tool(
+  "get_people",
+  "Get a list of people using the provided API endpoint with OAuth2 authentication",
+  async () => {
+    const clientSecret = "LHSPassword1";
+    const tokenUrl = `${identity_domain}/identity/connect/token`;
+
+    if (!userName || !clientSecret || !tokenUrl) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "OAuth2 credentials are not set in environment variables.",
+          },
+        ],
+      };
+    }
+
+    // Get access token
+    let accessToken: string | null = null;
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "password",
+          client_id: 'POSTMAN',
+          client_secret: clientSecret,
+          username: userName,
+          password: clientSecret,
+          scope: 'conversationsmanagement openid offline_access'
+        }),
+      });
+      const tokenJson = await tokenRes.json();
+      accessToken = tokenJson.access_token;
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error obtaining OAuth2 token: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+
+    if (!accessToken) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No access token received from OAuth2 server.",
+          },
+        ],
+      };
+    }
+
+    const endpoint = "https://testapi.dev.getbusy.com/api/v1/contacts/person?withBlankEmails=true&withStats=false";
+    try {
+      const res = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const text = await res.text();
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Status: ${res.status}\nResponse:\n${text}`,
+          },
+        ],
+      };
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error calling API: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+  }
+);
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
