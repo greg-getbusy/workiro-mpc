@@ -455,6 +455,12 @@ server.tool(
     first_name: z.string().optional(),
     last_name: z.string().optional(),
     email_address: z.string().email("Invalid email address").optional(),
+    relates_to: z.object({
+    contacts: z.array(
+      z.object({
+        id: z.string()
+      })
+    )}),
     relationships: z.array(
       z.object({
         id: z.string(),
@@ -469,7 +475,7 @@ server.tool(
     ).optional()
   },
   {
-    title: "Update a person using the provided schema and PATCH to /api/v1/contacts/person/{id} with OAuth2 authentication"
+    title: "Update a person in Workiro"
   },
   async (args, _extra) => {
     const clientSecret = "LHSPassword1";
