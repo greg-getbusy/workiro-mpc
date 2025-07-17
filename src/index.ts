@@ -768,15 +768,16 @@ const createProjectSchema = {
       value: z.string()
     })
   ),
-  relates_to: z.object({
-    tags: z.array(z.object({ id: z.string() })).optional(),
-    contacts: z.array(z.object({ id: z.string() })).optional(),
-    projects: z.array(z.object({ id: z.string() })).optional(),
-    prompts: z.array(z.object({ id: z.string() })).optional(),
-    messages: z.array(z.object({ id: z.string() })).optional(),
-    connections: z.array(z.object({ id: z.string() })).optional()
+  workspace_unit: z.object({
+    properties: z.array(z.unknown()),
+    id: z.string(),
+    type_id: z.string(),
+    type_version: z.number()
   }),
-  workspace_unit: z.object({})
+  relates_to: z.object({
+    contacts: z.array(z.object({ id: z.string() })),
+    projects: z.array(z.object({ id: z.string() }))
+  })
 };
 
 server.tool(
@@ -869,6 +870,69 @@ server.tool(
           },
         ],
       };
+    }
+  }
+);
+
+server.resource(
+  "workspaces",
+  "workiro://workspaces",
+  async (uri: any) => {
+    const clientSecret = "LHSPassword1";
+    const tokenUrl = `${identity_domain}/identity/connect/token`;
+
+    if (!userName || !clientSecret || !tokenUrl) {
+      throw new Error("OAuth2 credentials are not set in environment variables.");
+    }
+
+    // Get access token
+    let accessToken: string | null = null;
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "password",
+          client_id: 'POSTMAN',
+          client_secret: clientSecret,
+          username: userName,
+          password: clientSecret,
+          scope: 'conversationsmanagement openid offline_access'
+        }),
+      });
+      const tokenJson = await tokenRes.json();
+      accessToken = tokenJson.access_token;
+    } catch (err) {
+      throw new Error("Error obtaining OAuth2 token: " + (err as Error).message);
+    }
+
+    if (!accessToken) {
+      throw new Error("No access token received from OAuth2 server.");
+    }
+
+    const endpoint = "https://testapi.dev.getbusy.com/api/v1/workspaces";
+    try {
+      const res = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json"
+        },
+      });
+      const text = await res.text();
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            mimeType: "application/json",
+            text,
+          },
+        ],
+      };
+    } catch (err) {
+      throw new Error("Error calling API: " + (err as Error).message);
     }
   }
 );
