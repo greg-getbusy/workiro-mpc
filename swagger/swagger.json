@@ -1,0 +1,1599 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Workiro API",
+    "description": "An ASP.NET Core Web API for managing Workiro",
+    "termsOfService": "https://www.workiro.com/terms-and-policies/terms-of-service?utm_source=internal&utm_medium=link&utm_campaign=create_account",
+    "contact": {
+      "name": "Workiro",
+      "url": "https://app.workiro.com"
+    },
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/accounts/profile": {
+      "put": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "an endpoint to update profile",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Accounts.AccountProfileRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Accounts.AccountProfileRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Accounts.AccountProfileRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Accounts.AccountProfileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Accounts.AccountProfileResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Accounts.AccountProfileResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Accounts.AccountProfileResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/documents/{documentGuid:guid}": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "an endpoint to upload document version",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "description": "The document uuid",
+            "required": true,
+            "schema": {
+              "type": "string($uuid)"
+            }
+          },
+          {
+            "name": "ticket",
+            "in": "query",
+            "description": "An upload ticket",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/documents": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "an endpoint to upload document",
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v2/user/profile/avatar": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "an endpoint to upload a user avatar image",
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/associations/document": {
+      "put": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "an endpoint to update a contact document associations",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.EditDocumentAssociationRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.EditDocumentAssociationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.EditDocumentAssociationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.EditDocumentAssociationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.ManyDocumentResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.ManyDocumentResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.ManyDocumentResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/associations/documents": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "an endpoint to add document associations",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.CreateDocumentsAssociationsRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.CreateDocumentsAssociationsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.CreateDocumentsAssociationsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.CreateDocumentsAssociationsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.DocumentsAssociationsResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.DocumentsAssociationsResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.DocumentsAssociationsResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/associations/connection/{targetUserGuid}/document": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to get contact document associations",
+        "parameters": [
+          {
+            "name": "targetUserGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.ManyDocumentResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.ManyDocumentResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Documents.ManyDocumentResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/associations/connection/{targetUserGuid}/document/{documentGuid}/download": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to get contact document download ticket",
+        "parameters": [
+          {
+            "name": "targetUserGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "documentGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/associations/connection/{targetUserGuid}/document/{documentGuid}/upload": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to get contact document upload ticket",
+        "parameters": [
+          {
+            "name": "targetUserGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "documentGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/associations/connection/{targetUserGuid}/document/{documentGuid}/meta": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to get contact document metadata ticket",
+        "parameters": [
+          {
+            "name": "targetUserGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "documentGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[System.String]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/classification/tags": {
+      "get": {
+        "tags": [
+          "Classification"
+        ],
+        "summary": "an endpoint to get personal tags",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagType"
+            }
+          },
+          {
+            "name": "stats",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "hash",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse[]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse[]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse[]]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Classification"
+        ],
+        "summary": "an endpoint to create tags",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagsRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagCatalogResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagCatalogResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagCatalogResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/classification/tag/{tagGuid}": {
+      "put": {
+        "tags": [
+          "Classification"
+        ],
+        "summary": "an endpoint to update tag",
+        "parameters": [
+          {
+            "name": "tagGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Classification"
+        ],
+        "summary": "an endpoint to delete a tag",
+        "parameters": [
+          {
+            "name": "tagGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/classification/tag": {
+      "post": {
+        "tags": [
+          "Classification"
+        ],
+        "summary": "an endpoint to create a tag",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Tags.UserTagRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Tags.UserTagWithStatsResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/connections": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to create a contact based on the properties in the request",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreateConnectionRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreateConnectionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreateConnectionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreateConnectionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/contacts": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to get all contacts",
+        "parameters": [
+          {
+            "name": "withStats",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/contacts/query": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to get contacts by ids",
+        "parameters": [
+          {
+            "name": "withStats",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.GetContactsByIdsRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.GetContactsByIdsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.GetContactsByIdsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.GetContactsByIdsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/contacts/search": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to find contacts",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.SearchConnectionRequest"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.SearchConnectionRequest"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.SearchConnectionRequest"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.SearchConnectionRequest"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.SearchConnectionsResponse[]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.SearchConnectionsResponse[]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.SearchConnectionsResponse[]]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/contacts/person": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to get person contacts",
+        "parameters": [
+          {
+            "name": "withBlankEmails",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "withStats",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to create a person contact",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreatePersonRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreatePersonRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreatePersonRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreatePersonRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/contacts/organization": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to get organization contacts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse[]]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "an endpoint to create an organization contact",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreateOrganizationRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreateOrganizationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreateOrganizationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBusy.Types.Http.Contacts.CreateOrganizationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBusy.Gateway.Api.ApiResponse`1[GetBusy.Types.Http.Contacts.ContactResponse]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ]
+      }
+    }
+  }
+ 
+}

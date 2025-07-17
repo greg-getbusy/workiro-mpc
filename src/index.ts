@@ -119,6 +119,105 @@ server.tool(
   }
 );
 
+server.tool(
+  "create_person",
+  {
+    first_name: z.string(),
+    last_name: z.string(),
+    email_address: z.string().email("Invalid email address")ssssssssss
+  },
+  {
+    title: "Create a person using the provided schema and POST to /api/v1/contacts/person with OAuth2 authentication"
+  },
+  async (args, _extra) => {
+    // OAuth2 credentials (should be from env in production)
+    const clientId = "gbusertest.gregf+mcp_server_1@gmail.com";
+    const clientSecret = "LHSPassword1";
+    const tokenUrl = "http://localhost:8181/identity/connect/token";
+
+    if (!clientId || !clientSecret || !tokenUrl) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "OAuth2 credentials are not set in environment variables.",
+          },
+        ],
+      };
+    }
+
+    // Get access token
+    let accessToken: string | null = null;
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "password",
+          client_id: 'POSTMAN',
+          client_secret: clientSecret,
+          username: clientId,
+          password: clientSecret,
+          scope: 'conversationsmanagement openid offline_access'
+        }),
+      });
+      const tokenJson = await tokenRes.json();
+      accessToken = tokenJson.access_token;
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error obtaining OAuth2 token: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+
+    if (!accessToken) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No access token received from OAuth2 server.",
+          },
+        ],
+      };
+    }
+
+    const endpoint = "http://localhost:7050/api/v1/contacts/person";
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(args),
+      });
+      const text = await res.text();
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Status: ${res.status}\nResponse:\n${text}`,
+          },
+        ],
+      };
+    } catch (err) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Error calling API: " + (err as Error).message,
+          },
+        ],
+      };
+    }
+  }
+);
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
