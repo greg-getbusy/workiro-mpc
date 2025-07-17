@@ -8,7 +8,8 @@
       "alwaysAllow": [
         "call_custom_api",
         "create_person",
-        "get_people"
+        "get_people",
+        "get_relationships"
       ]
     },
     "git": {
