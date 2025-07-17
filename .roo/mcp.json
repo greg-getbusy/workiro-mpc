@@ -12,7 +12,9 @@
         "get_relationships",
         "create_organization",
         "update_person",
-        "update_organization"
+        "update_organization",
+        "get_workspaces",
+        "create_project"
       ],
       "disabledTools": [
         "call_custom_api"
