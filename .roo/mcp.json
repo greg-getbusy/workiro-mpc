@@ -8,6 +8,14 @@
       "alwaysAllow": [
         "call_custom_api"
       ]
+    },
+    "git": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "https://bitbucket.org/getbusyhq/workiro.mpc.git"
+      ]
     }
   }
 }
