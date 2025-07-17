@@ -1,5 +1,7 @@
 Nik Walker
+
 Santiago Priore
+
 Anton
 
 Hello guys!
@@ -8,7 +10,4 @@ Guys where are u?
 
 Vyom Srivastava
 
-Greg 👋
-
-Random
 Greg 👋
